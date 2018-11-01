@@ -1,0 +1,29 @@
+{
+  "name": "@uon/router",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {},
+  "peerDependencies": {
+    "@uon/core": "^0.1.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uon-team/router.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Gabriel Roy",
+    "email": "gab@uon.io",
+    "url": "https://uon.io"
+  },
+  "keywords": [
+    "http",
+    "websockets",
+    "application",
+    "uon",
+    "server",
+    "typescript"
+  ]
+}
