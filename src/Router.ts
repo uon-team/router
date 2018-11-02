@@ -59,7 +59,7 @@ export class Router {
     add(route: Route, parent?: RouterRecord) {
 
         let base_path = parent ? parent.path : '';
-        let path = PathUtils.join(base_path, route.path);
+        let path = PathUtils.join(base_path, route.path) || '/';
         let keys: string[] = [];
         let regex = PathToRegex(path + (route.children || route.controller ? '(.*)' : ''), keys);
 
@@ -94,7 +94,7 @@ export class Router {
                         record.children = record.children || [];
 
 
-                        let h_path = PathUtils.join(path, d.path);
+                        let h_path = PathUtils.join(path, d.path) || '/';
                         let h_keys: string[] = [];
                         let h_regex = PathToRegex(h_path, h_keys);
 

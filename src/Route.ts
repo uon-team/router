@@ -30,7 +30,7 @@ export interface Route {
     priority?: number;
 
     /**
-     * Dat to pass along with a route match
+     * Data to pass along with a route match
      */
     data?: { [k: string]: any };
 

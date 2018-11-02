@@ -20,7 +20,7 @@ class DummyCtrl {
 
 
     @TestHandler({
-        path: '/:id',
+        path: '/',
         method: 'GET'
     })
     myFunc() {
@@ -38,14 +38,8 @@ let router = new Router();
 
 router.add({
 
-    path: '/api/v2',
-    children: [
-        {
-            path: '/potato',
-            controller: DummyCtrl
-        }
-
-    ]
+    path: '/',
+    controller: DummyCtrl
 });
 
 const match_method: RouteMatchFunction = (rh: TestHandler, data: any) => {
@@ -57,5 +51,5 @@ const match_method: RouteMatchFunction = (rh: TestHandler, data: any) => {
     return false;
 }
 
-//console.log((router as any)._records[0].children[0])
-console.log(router.match('/api/v2/potato/hello', {method: 'GET'}, [match_method]));
+console.log((router as any)._records[0].children[0])
+console.log(router.match('/', {method: 'GET'}, [match_method]));
