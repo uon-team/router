@@ -1,32 +1,32 @@
 
-import { GetPropertiesMetadata, PathUtils } from '@uon/core';
+import { Type, GetPropertiesMetadata, PathUtils } from '@uon/core';
 import { Route } from './Route';
 import { PathToRegex } from './Utils';
 import { RouteHandler } from './RouteHandler';
+import { RouteMatch } from './RouteMatch';
 
 
 const EMPTY_OBJECT: any = {};
 
-export class RouteMatch {
 
-    constructor(readonly path: string,
-        readonly route: Route,
-        readonly handler: RouteHandler,
-        readonly params: { [k: string]: string }) {
-
-    }
-
-}
-
+/**
+ * Internal object for every route in the router
+ */
 export interface RouterRecord {
     path: string;
     regex: RegExp;
-    route: Route;
     children?: RouterRecord[];
+    controller?: Type<any>;
+    guards?: any[];
+    data?: any;
     handler?: RouteHandler;
     keys: any[];
 }
 
+
+/**
+ * unused
+ */
 export interface RouteMatchOptions {
     data?: any;
     captureController: boolean;
@@ -34,9 +34,11 @@ export interface RouteMatchOptions {
 
 }
 
+
+/**
+ * User defined route match function signature
+ */
 export type RouteMatchFunction = (rh: RouteHandler, data: any) => boolean;
-
-
 
 
 
@@ -45,11 +47,12 @@ export type RouteMatchFunction = (rh: RouteHandler, data: any) => boolean;
  */
 export class Router {
 
+    /**
+     * all of the records associated with this router
+     */
     protected _records: RouterRecord[] = [];
 
-    constructor() {
-
-    }
+    constructor() {}
 
     /**
      * Adds a route to the router records
@@ -62,12 +65,15 @@ export class Router {
         let path = PathUtils.join(base_path, route.path) || '/';
         let keys: string[] = [];
         let regex = PathToRegex(path + (route.children || route.controller ? '(.*)' : ''), keys);
+        let guards = [].concat(parent ? parent.guards : [], route.guards || []);
+        let data = route.data;
 
         let record: RouterRecord = {
             path,
             regex,
             keys,
-            route
+            guards,
+            data
         };
 
         if (!parent) {
@@ -93,17 +99,17 @@ export class Router {
                         // add record
                         record.children = record.children || [];
 
-
                         let h_path = PathUtils.join(path, d.path) || '/';
                         let h_keys: string[] = [];
                         let h_regex = PathToRegex(h_path, h_keys);
 
                         record.children.push({
                             path: h_path,
+                            controller: route.controller,
+                            guards: guards,
                             handler: d,
                             regex: h_regex,
-                            keys: h_keys,
-                            route: route
+                            keys: h_keys
                         });
 
 
@@ -115,7 +121,7 @@ export class Router {
         }
 
 
-        // add children recursivelly
+        // add children recursively
         if (route.children) {
             for (let i = 0; i < route.children.length; i++) {
                 const c = route.children[i];
@@ -146,6 +152,15 @@ export class Router {
         return output;
     }
 
+
+    /**
+     * Match all routes satisfying the query
+     * @param path 
+     * @param records 
+     * @param userData 
+     * @param matchFuncs 
+     * @param output 
+     */
     private _matchRecursive(path: string,
         records: RouterRecord[],
         userData: any,
@@ -162,13 +177,13 @@ export class Router {
 
                     output.push(new RouteMatch(
                         path,
-                        r.route,
+                        r.controller,
+                        r.guards,
                         r.handler,
+                        r.data,
                         ExtractParams(r, path)
                     ));
                 }
-
-
 
                 if (r.children) {
                     this._matchRecursive(path, r.children, userData, matchFuncs, output);
@@ -182,7 +197,16 @@ export class Router {
 }
 
 
-function MatchUserData(matchFunctions: any[], handler: RouteHandler, data: any) {
+/**
+ * Test a handler against user provided data.
+ * If either data or matchFunctions are undefined, the test will pass. 
+ * All matchFunctions must return true for this to pass.
+ * @private
+ * @param matchFunctions 
+ * @param handler 
+ * @param data 
+ */
+function MatchUserData(matchFunctions: RouteMatchFunction[], handler: RouteHandler, data: any) {
 
     if (!data || !matchFunctions) {
         return true;

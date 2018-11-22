@@ -1,8 +1,13 @@
-
-
 import { Type } from '@uon/core';
 
 
+/**
+ * Route definition interface
+ * 
+ * A route must consist of at least a path and contain one of 'controller' or 'children'
+ * 
+ * 
+ */
 export interface Route {
     /**
      * The path to test
@@ -20,9 +25,9 @@ export interface Route {
     controller?: Type<any>
 
     /**
-     * List of activators that must pass the tests
+     * List of guards
      */
-    activators?: any[];
+    guards?: any[];
 
     /**
      * The order in which the route will be tested, lower numbers get tested first
@@ -36,7 +41,5 @@ export interface Route {
 
     
 }
-
-
 
 export type Routes = Route[];

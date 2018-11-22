@@ -2,17 +2,21 @@ import { InjectionToken, ModuleWithProviders, Module, Inject } from "@uon/core";
 import { Router } from "./Router";
 import { Routes } from "./Route";
 
-export const ROUTER_MODULE_INIT_TOKEN = new InjectionToken<any>("okook");
+export const ROUTER_MODULE_INIT_TOKEN = new InjectionToken<Routes[]>("The routes initializers");
 
 
 @Module({})
 export class RouterModule {
 
-    constructor(@Inject(ROUTER_MODULE_INIT_TOKEN) stuff: any[]) {
+    constructor(@Inject(ROUTER_MODULE_INIT_TOKEN) routes: Routes[]) {
     }
 
+    /**
+     * Initiates routes for a given router token
+     * @param token 
+     * @param routes 
+     */
     static For(token: InjectionToken<Router>, routes: Routes): ModuleWithProviders {
-
 
         return {
             module: RouterModule,
