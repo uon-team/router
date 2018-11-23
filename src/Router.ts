@@ -45,14 +45,25 @@ export type RouteMatchFunction = (rh: RouteHandler, data: any) => boolean;
 /**
  * A router is responsible for matching an handler with a Url and custom user data
  */
-export class Router {
+export class Router<T extends RouteHandler> {
 
     /**
      * all of the records associated with this router
      */
     protected _records: RouterRecord[] = [];
 
-    constructor() {}
+    /**
+     * The route handler type
+     */
+    protected _handlerType: Type<T>
+
+    /**
+     * Create a new router
+     * @param handlerType 
+     */
+    constructor(handlerType: Type<T>) {
+        this._handlerType = handlerType;
+    }
 
     /**
      * Adds a route to the router records
@@ -94,7 +105,7 @@ export class Router {
 
                 properties_meta[key].forEach((d) => {
 
-                    if (d instanceof RouteHandler) {
+                    if (d instanceof this._handlerType) {
 
                         // add record
                         record.children = record.children || [];
@@ -144,12 +155,11 @@ export class Router {
      * Match the path with the local records
      * @param path 
      */
-    match(path: string, userData?: any, matchFuncs?: RouteMatchFunction[]): RouteMatch[] {
+    match(path: string, userData?: any, matchFuncs?: RouteMatchFunction[]): RouteMatch {
+        
+        let result = this._matchRecursive(path, this._records, userData, matchFuncs);
 
-        const output: RouteMatch[] = [];
-        this._matchRecursive(path, this._records, userData, matchFuncs, output);
-
-        return output;
+        return result;
     }
 
 
@@ -164,8 +174,7 @@ export class Router {
     private _matchRecursive(path: string,
         records: RouterRecord[],
         userData: any,
-        matchFuncs: RouteMatchFunction[],
-        output: RouteMatch[]) {
+        matchFuncs: RouteMatchFunction[]): RouteMatch {
 
 
         for (let i = 0; i < records.length; ++i) {
@@ -175,18 +184,18 @@ export class Router {
 
                 if (r.handler && MatchUserData(matchFuncs, r.handler, userData)) {
 
-                    output.push(new RouteMatch(
+                    return new RouteMatch(
                         path,
                         r.controller,
                         r.guards,
                         r.handler,
                         r.data,
                         ExtractParams(r, path)
-                    ));
+                    );
                 }
 
                 if (r.children) {
-                    this._matchRecursive(path, r.children, userData, matchFuncs, output);
+                    return this._matchRecursive(path, r.children, userData, matchFuncs);
                 }
 
             }

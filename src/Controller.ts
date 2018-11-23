@@ -1,7 +1,17 @@
-import { MakeTypeDecorator } from "@uon/core";
+import { MakeTypeDecorator, Provider } from "@uon/core";
+
+
+
+export interface Controller {
+
+    /**
+     * A list of extra providers for this controller
+     */
+    providers?: Provider[];
+}
 
 
 /**
- * A no-op Decorator to use for route controllers, Same as @Injectable()
+ * Defines a controller to be used as a router outlet
  */
-export const Controller = MakeTypeDecorator("Controller");
+export const Controller = MakeTypeDecorator("Controller", (i: Controller) => i);

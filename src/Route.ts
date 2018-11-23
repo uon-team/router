@@ -1,4 +1,5 @@
 import { Type } from '@uon/core';
+import { IRouteGuardService, RouteGuard } from './RouteGuard';
 
 
 /**
@@ -27,7 +28,7 @@ export interface Route {
     /**
      * List of guards
      */
-    guards?: any[];
+    guards?: RouteGuard[];
 
     /**
      * The order in which the route will be tested, lower numbers get tested first

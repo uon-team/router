@@ -16,14 +16,14 @@ export class RouterModule {
      * @param token 
      * @param routes 
      */
-    static For(token: InjectionToken<Router>, routes: Routes): ModuleWithProviders {
+    static For(token: InjectionToken<Router<any>>, routes: Routes): ModuleWithProviders {
 
         return {
             module: RouterModule,
             providers: [
                 {
                     token: ROUTER_MODULE_INIT_TOKEN,
-                    factory: (router: Router) => {   
+                    factory: (router: Router<any>) => {   
                         routes.forEach((r) => {
                             router.add(r);
                         });

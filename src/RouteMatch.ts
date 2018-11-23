@@ -21,7 +21,7 @@ export class RouteMatch {
     }
 
     toActivatedRoute(): ActivatedRoute {
-        return new ActivatedRoute(this.path, this.params);
+        return new ActivatedRoute(this.path, this.params, this.routeData);
     }
 
 }
