@@ -11,7 +11,7 @@ export * from './Router';
 export * from './Route';
 export * from './RouteHandler';
 export * from './RouterModule';
-export * from './Controller';
+export * from './RouterOutlet';
 export * from './RouteMatch';
 export * from './RouteGuard';
 export * from './ActivatedRoute';

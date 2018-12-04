@@ -5,7 +5,7 @@ import { IRouteGuardService, RouteGuard } from './RouteGuard';
 /**
  * Route definition interface
  * 
- * A route must consist of at least a path and contain one of 'controller' or 'children'
+ * A route must consist of at least a path and contain one of 'outlet' or 'children'
  * 
  * 
  */
@@ -23,7 +23,7 @@ export interface Route {
     /**
      * The controller to activate on route match
      */
-    controller?: Type<any>
+    outlet?: Type<any>
 
     /**
      * List of guards

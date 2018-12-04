@@ -1,6 +1,5 @@
 import { Type } from "@uon/core";
 
-import { Route } from "./Route";
 import { RouteHandler } from "./RouteHandler";
 import { RouteGuard } from "./RouteGuard";
 import { ActivatedRoute } from "./ActivatedRoute";
@@ -12,7 +11,7 @@ import { ActivatedRoute } from "./ActivatedRoute";
 export class RouteMatch {
 
     constructor(readonly path: string,
-        readonly controller: Type<any>,
+        readonly outlet: Type<any>,
         readonly guards: RouteGuard[],
         readonly handler: RouteHandler,
         readonly routeData: any,

@@ -2,7 +2,7 @@ import { MakeTypeDecorator, Provider } from "@uon/core";
 
 
 
-export interface Controller {
+export interface RouterOutlet {
 
     /**
      * A list of extra providers for this controller
@@ -14,4 +14,4 @@ export interface Controller {
 /**
  * Defines a controller to be used as a router outlet
  */
-export const Controller = MakeTypeDecorator("Controller", (i: Controller) => i);
+export const RouterOutlet = MakeTypeDecorator("RouterOutlet", (i: RouterOutlet) => i);

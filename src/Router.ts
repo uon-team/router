@@ -16,7 +16,7 @@ export interface RouterRecord {
     path: string;
     regex: RegExp;
     children?: RouterRecord[];
-    controller?: Type<any>;
+    outlet?: Type<any>;
     guards?: any[];
     data?: any;
     handler?: RouteHandler;
@@ -75,7 +75,7 @@ export class Router<T extends RouteHandler> {
         let base_path = parent ? parent.path : '';
         let path = PathUtils.join(base_path, route.path) || '/';
         let keys: string[] = [];
-        let regex = PathToRegex(path + (route.children || route.controller ? '(.*)' : ''), keys);
+        let regex = PathToRegex(path + (route.children || route.outlet ? '(.*)' : ''), keys);
         let guards = [].concat(parent ? parent.guards : [], route.guards || []);
         let data = route.data;
 
@@ -97,9 +97,9 @@ export class Router<T extends RouteHandler> {
 
 
         // check for handlers and add them as records
-        if (route.controller) {
+        if (route.outlet) {
 
-            let properties_meta = GetPropertiesMetadata(route.controller.prototype);
+            let properties_meta = GetPropertiesMetadata(route.outlet.prototype);
 
             for (let key in properties_meta) {
 
@@ -116,7 +116,7 @@ export class Router<T extends RouteHandler> {
 
                         record.children.push({
                             path: h_path,
-                            controller: route.controller,
+                            outlet: route.outlet,
                             guards: guards,
                             handler: d,
                             regex: h_regex,
@@ -186,7 +186,7 @@ export class Router<T extends RouteHandler> {
 
                     return new RouteMatch(
                         path,
-                        r.controller,
+                        r.outlet,
                         r.guards,
                         r.handler,
                         r.data,

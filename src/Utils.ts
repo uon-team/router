@@ -18,9 +18,9 @@ const PATH_REGEXP = new RegExp([
 export function PathToRegex(str: string, keys?: string[]) {
 
 
-    let tokens: any[] = []
-    let key = 0
-    let index = 0
+    let tokens: any[] = [];
+    let key = 0;
+    let index = 0;
     let path = '';
     let path_escaped = false;
     let res: any = null;
@@ -38,20 +38,20 @@ export function PathToRegex(str: string, keys?: string[]) {
 
         // Ignore already escaped sequences.
         if (escaped) {
-            path += escaped[1]
-            path_escaped = true
-            continue
+            path += escaped[1];
+            path_escaped = true;
+            continue;
         }
 
-        var prev = ''
-        var next = str[index]
-        var name = res[2]
-        var capture = res[3]
-        var group = res[4]
-        var modifier = res[5]
+        let prev = '';
+        let next = str[index];
+        let name = res[2];
+        let capture = res[3];
+        let group = res[4];
+        let modifier = res[5];
 
         if (!path_escaped && path.length) {
-            var k = path.length - 1
+            let k = path.length - 1;
 
             if (delimiters.indexOf(path[k]) > -1) {
                 prev = path[k]
@@ -66,11 +66,11 @@ export function PathToRegex(str: string, keys?: string[]) {
             path_escaped = false
         }
 
-        var partial = prev !== '' && next !== undefined && next !== prev
-        var repeat = modifier === '+' || modifier === '*'
-        var optional = modifier === '?' || modifier === '*'
-        var delimiter = prev || '/'
-        var pattern = capture || group
+        let partial = prev !== '' && next !== undefined && next !== prev;
+        let repeat = modifier === '+' || modifier === '*';
+        let optional = modifier === '?' || modifier === '*';
+        let delimiter = prev || '/';
+        let pattern = capture || group;
 
         tokens.push({
             name: name || key++,
@@ -85,16 +85,15 @@ export function PathToRegex(str: string, keys?: string[]) {
 
     // Push any remaining characters.
     if (path || index < str.length) {
-        tokens.push(path + str.substr(index))
+        tokens.push(path + str.substr(index));
     }
 
 
 
-    var delimiter = EscapeString(PATH_DELIMITER)
-
-    var endsWith = '$';
-    var route = ''
-    var isEndDelimited = false
+    let delimiter = EscapeString(PATH_DELIMITER);
+    let ends_with = '$';
+    let route = ''
+    let end_delimited = false
 
     // Iterate over the tokens and create our regexp string.
     for (var i = 0; i < tokens.length; i++) {
@@ -102,7 +101,7 @@ export function PathToRegex(str: string, keys?: string[]) {
 
         if (typeof token === 'string') {
             route += EscapeString(token)
-            isEndDelimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1
+            end_delimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1
         } else {
             var prefix = EscapeString(token.prefix)
             var capture = token.repeat
@@ -123,11 +122,7 @@ export function PathToRegex(str: string, keys?: string[]) {
         }
     }
 
-
-
-
-    route += endsWith === '$' ? '$' : '(?=' + endsWith + ')'
-
+    route += ends_with === '$' ? '$' : '(?=' + ends_with + ')'
 
     return new RegExp('^' + route, 'i');
 
