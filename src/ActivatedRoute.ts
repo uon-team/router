@@ -1,3 +1,8 @@
+
+
+/**
+ * Data for the matched route
+ */
 export class ActivatedRoute<D = any> {
 
     constructor(

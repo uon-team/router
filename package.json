@@ -1,9 +1,8 @@
 {
   "name": "@uon/router",
-  "version": "0.4.0",
+  "version": "0.9.0",
   "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "index.js",
   "scripts": {},
   "peerDependencies": {
     "@uon/core": "^0.4.0"

@@ -14,4 +14,4 @@ export interface IRouteGuardService {
     checkGuard(activatedRoute: ActivatedRoute): Promise<boolean> | boolean;
 }
 
-export type RouteGuard = Type<IRouteGuardService>;
+export type RouteGuard = Type<IRouteGuardService> | ((ac: ActivatedRoute) => Promise<boolean> | boolean);

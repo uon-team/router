@@ -23,7 +23,7 @@ export interface Route {
     /**
      * The controller to activate on route match
      */
-    outlet?: Type<any>
+    outlet?: Type<any>;
 
     /**
      * List of guards

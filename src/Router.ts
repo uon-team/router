@@ -21,6 +21,7 @@ export interface RouterRecord {
     data?: any;
     handler?: RouteHandler;
     keys: any[];
+    priority?: number;
 }
 
 
@@ -139,6 +140,11 @@ export class Router<T extends RouteHandler> {
                 this.add(c, record);
             }
         }
+
+
+        // TODO sort by priority
+
+
 
         return record;
 
