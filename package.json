@@ -2,10 +2,10 @@
   "name": "@uon/router",
   "version": "0.9.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {},
   "peerDependencies": {
-    "@uon/core": "^0.4.0"
+    "@uon/core": "^0.9.0"
   },
   "repository": {
     "type": "git",

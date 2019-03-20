@@ -155,6 +155,7 @@ export class Router<T extends RouteHandler> {
      */
     remove(route: Route) {
 
+        throw new Error('Not implemented.')
     }
 
     /**
