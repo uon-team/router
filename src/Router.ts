@@ -114,11 +114,12 @@ export class Router<T extends RouteHandler> {
                         let h_path = PathUtils.join(path, d.path) || '/';
                         let h_keys: string[] = [];
                         let h_regex = PathToRegex(h_path, h_keys);
+                        let h_guards = d.guards || [];
 
                         record.children.push({
                             path: h_path,
                             outlet: route.outlet,
-                            guards: guards,
+                            guards: guards.concat(h_guards),
                             handler: d,
                             regex: h_regex,
                             keys: h_keys
