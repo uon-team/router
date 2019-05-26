@@ -1,4 +1,4 @@
-import { MakeTypeDecorator, Provider } from "@uon/core";
+import { MakeTypeDecorator, Provider, TypeDecorator } from "@uon/core";
 
 
 
@@ -12,6 +12,15 @@ export interface RouterOutlet {
 
 
 /**
+ * 
+ */
+export interface RouteOutletDecorator {
+    (meta?: RouterOutlet): TypeDecorator;
+    new(meta?: RouterOutlet): RouterOutlet;
+}
+
+
+/**
  * Defines a controller to be used as a router outlet
  */
-export const RouterOutlet = MakeTypeDecorator("RouterOutlet", (i: RouterOutlet) => i);
+export const RouterOutlet: RouteOutletDecorator = MakeTypeDecorator("RouterOutlet", (i: RouterOutlet) => i);

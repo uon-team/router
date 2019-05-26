@@ -2,7 +2,7 @@ import { Type } from "@uon/core";
 
 import { RouteHandler } from "./RouteHandler";
 import { RouteGuard } from "./RouteGuard";
-import { ActivatedRoute } from "./ActivatedRoute";
+import { ActivatedRoute, RouteParams } from "./ActivatedRoute";
 
 
 /**
@@ -20,7 +20,7 @@ export class RouteMatch {
     }
 
     toActivatedRoute(): ActivatedRoute {
-        return new ActivatedRoute(this.path, this.params, this.routeData);
+        return new ActivatedRoute(this.path, Object.assign(new RouteParams(), this.params), this.routeData);
     }
 
 }

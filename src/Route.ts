@@ -31,16 +31,23 @@ export interface Route {
     guards?: RouteGuard[];
 
     /**
-     * The order in which the route will be tested, lower numbers get tested first
+     * Hash map of resolver to invoke before activating the route,
+     * output goes into ActivatedRoute data
      */
-    priority?: number;
+    resolve?: { [k: string]: Type<any> }
 
     /**
      * Data to pass along with a route match
      */
     data?: { [k: string]: any };
 
-    
+    /**
+     * The order in which the route will be tested, lower numbers get tested first
+     */
+    priority?: number;
+
+
+
 }
 
 export type Routes = Route[];

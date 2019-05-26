@@ -1,6 +1,6 @@
 
 
-import { MakePropertyDecorator, PropDecorator } from '@uon/core';
+import { MakePropertyDecorator, PropDecorator, DependencyRecord, GetInjectionTokens } from '@uon/core';
 import { RouteGuard } from './RouteGuard';
 
 /**
@@ -18,6 +18,12 @@ export class RouteHandler {
      * Automatically set as the method name it decorates
      */
     methodKey?: string;
+
+    /**
+     * List of DI records for the method
+     */
+    dependencies?: DependencyRecord[];
+
 
     constructor() {
 
@@ -50,7 +56,6 @@ export interface RouteHandlerData {
 
 }
 
-
 /**
  * Creates a Route handler decorator
  * @param name 
@@ -60,6 +65,7 @@ export function MakeRouteHandlerDecorator<T extends RouteHandlerData>(name: stri
     const decorator: RouteHandlerDecorator<T> = MakePropertyDecorator(name, (obj: any) => obj, RouteHandler, (cls: any, meta: any, key: string) => {
 
         meta.methodKey = key;
+        meta.dependencies = GetInjectionTokens(cls, key);
 
     });
 
