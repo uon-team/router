@@ -1,11 +1,6 @@
 
 
-
-
-
-export class RouteParams  {
-    [k: string]: string;
-}
+import { RouteParams } from "./RouteParams";
 
 
 /**

@@ -2,7 +2,8 @@ import { Type } from "@uon/core";
 
 import { RouteHandler } from "./RouteHandler";
 import { RouteGuard } from "./RouteGuard";
-import { ActivatedRoute, RouteParams } from "./ActivatedRoute";
+import { ActivatedRoute } from "./ActivatedRoute";
+import { RouteParams } from "./RouteParams";
 
 
 /**
