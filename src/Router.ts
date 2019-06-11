@@ -4,6 +4,7 @@ import { Route } from './Route';
 import { PathToRegex } from './Utils';
 import { RouteHandler } from './RouteHandler';
 import { RouteMatch } from './RouteMatch';
+import { Resolver } from './Resolver';
 
 
 const EMPTY_OBJECT: any = {};
@@ -19,6 +20,7 @@ export interface RouterRecord {
     outlet?: Type<any>;
     guards?: any[];
     data?: any;
+    resolvers?: { [k: string]: Resolver<any> };
     handler?: RouteHandler;
     keys: any[];
     priority?: number;
@@ -73,34 +75,37 @@ export class Router<T extends RouteHandler> {
      */
     add(route: Route, parent?: RouterRecord) {
 
-        let base_path = parent ? parent.path : '';
-        let path = PathUtils.join(base_path, route.path) || '/';
-        let keys: string[] = [];
-        let regex = PathToRegex(path + (route.children || route.outlet ? '(.*)' : ''), keys);
-        let guards = [].concat(parent ? parent.guards : [], route.guards || []);
-        let data = route.data;
+        const base_path = parent ? parent.path : '';
+        const path = PathUtils.join(base_path, route.path) || '/';
+        const keys: string[] = [];
+        const regex = PathToRegex(path + (route.children || route.outlet ? '(.*)' : ''), keys);
+        const guards = [].concat(parent ? parent.guards : [], route.guards || []);
+        const data = Object.assign({}, parent ? parent.data : {}, route.data);
+        const resolvers = Object.assign({}, parent ? parent.resolvers : {}, route.resolve);
 
-        let record: RouterRecord = {
+        const record: RouterRecord = {
             path,
             regex,
             keys,
             guards,
-            data
+            data,
+            resolvers
         };
 
+        // if no parent was passed, add to root
         if (!parent) {
             this._records.push(record);
         }
+        // append to parent otherwise
         else {
             parent.children = parent.children || [];
             parent.children.push(record);
         }
 
-
         // check for handlers and add them as records
         if (route.outlet) {
 
-            let properties_meta = GetPropertiesMetadata(route.outlet.prototype);
+            const properties_meta = GetPropertiesMetadata(route.outlet.prototype);
 
             for (let key in properties_meta) {
 
@@ -108,18 +113,21 @@ export class Router<T extends RouteHandler> {
 
                     if (d instanceof this._handlerType) {
 
-                        // add record
+                        // ensure children is initialized
                         record.children = record.children || [];
 
-                        let h_path = PathUtils.join(path, d.path) || '/';
-                        let h_keys: string[] = [];
-                        let h_regex = PathToRegex(h_path, h_keys);
-                        let h_guards = d.guards || [];
+                        // join full path
+                        const h_path = PathUtils.join(path, d.path) || '/';
+                        const h_keys: string[] = [];
+                        const h_regex = PathToRegex(h_path, h_keys);
+                        const h_guards = d.guards || [];
+                        const h_resolvers = Object.assign({}, resolvers, d.resolve);
 
                         record.children.push({
                             path: h_path,
                             outlet: route.outlet,
                             guards: guards.concat(h_guards),
+                            resolvers: h_resolvers,
                             handler: d,
                             regex: h_regex,
                             keys: h_keys
@@ -159,12 +167,15 @@ export class Router<T extends RouteHandler> {
         throw new Error('Not implemented.')
     }
 
+
     /**
      * Match the path with the local records
      * @param path 
+     * @param userData 
+     * @param matchFuncs 
      */
     match(path: string, userData?: any, matchFuncs?: RouteMatchFunction[]): RouteMatch {
-        
+
         let result = this._matchRecursive(path, this._records, userData, matchFuncs);
 
         return result;
@@ -177,31 +188,36 @@ export class Router<T extends RouteHandler> {
      * @param records 
      * @param userData 
      * @param matchFuncs 
-     * @param output 
      */
     private _matchRecursive(path: string,
         records: RouterRecord[],
         userData: any,
         matchFuncs: RouteMatchFunction[]): RouteMatch {
 
-
+        // go over all records until a match is found
         for (let i = 0; i < records.length; ++i) {
+
             const r = records[i];
 
+            // path must test positive
             if (r.regex.test(path)) {
 
+                // is this a handler and does it match user data
                 if (r.handler && MatchUserData(matchFuncs, r.handler, userData)) {
 
+                    // we have a match, return a RouteMatch object
                     return new RouteMatch(
                         path,
                         r.outlet,
                         r.guards,
                         r.handler,
+                        r.resolvers,
                         r.data,
                         ExtractParams(r, path)
                     );
                 }
 
+                // no concrete match yet, check children if any
                 if (r.children) {
                     return this._matchRecursive(path, r.children, userData, matchFuncs);
                 }

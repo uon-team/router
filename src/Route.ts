@@ -1,5 +1,6 @@
 import { Type } from '@uon/core';
 import { IRouteGuardService, RouteGuard } from './RouteGuard';
+import { Resolver } from './Resolver';
 
 
 /**
@@ -31,13 +32,14 @@ export interface Route {
     guards?: RouteGuard[];
 
     /**
-     * Hash map of resolver to invoke before activating the route,
-     * output goes into ActivatedRoute data
+     * Hash map of resolvers to invoke before activating the route,
+     * output goes into data
      */
-    resolve?: { [k: string]: Type<any> }
+    resolve?: { [k: string]: Resolver<any> }
 
     /**
-     * Data to pass along with a route match
+     * Static data to pass along with a route match,
+     * will be merged with resolved results
      */
     data?: { [k: string]: any };
 

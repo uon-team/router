@@ -1,6 +1,7 @@
 
 
 import { RouteParams } from "./RouteParams";
+import { RouteData, Data } from "./RouteData";
 
 
 /**
@@ -11,9 +12,8 @@ export class ActivatedRoute<D = any> {
     constructor(
         readonly path: string,
         readonly params: RouteParams,
-        readonly data: D
+        readonly data: RouteData & Data<D>
     ) {
-
 
     }
 }

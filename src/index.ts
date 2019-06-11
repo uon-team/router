@@ -15,3 +15,6 @@ export * from './RouterOutlet';
 export * from './RouteMatch';
 export * from './RouteGuard';
 export * from './ActivatedRoute';
+export * from './RouteParams';
+export * from './RouteData';
+export * from './Resolver';

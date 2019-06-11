@@ -2,6 +2,7 @@
 
 import { MakePropertyDecorator, PropDecorator, DependencyRecord, GetInjectionTokens } from '@uon/core';
 import { RouteGuard } from './RouteGuard';
+import { Resolver } from './Resolver';
 
 /**
  * Base class for RouteHandler implementations
@@ -52,6 +53,12 @@ export interface RouteHandlerData {
      * List of guards to execute before calling the handler
      */
     guards?: RouteGuard[];
+
+
+    /**
+     * Data resolver map
+     */
+    resolve?: { [k: string]: Resolver<any> }
 
 
 }
