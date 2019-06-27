@@ -21,6 +21,16 @@ export class RouteHandler {
     methodKey?: string;
 
     /**
+     * List of guards to execute before calling the handler
+     */
+    guards?: RouteGuard[];
+
+    /**
+     * Data resolver map
+     */
+    resolve?: { [k: string]: Resolver<any> }
+
+    /**
      * List of DI records for the method
      */
     dependencies?: DependencyRecord[];

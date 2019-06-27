@@ -113,6 +113,7 @@ export class Router<T extends RouteHandler> {
 
                     if (d instanceof this._handlerType) {
 
+                        
                         // ensure children is initialized
                         record.children = record.children || [];
 
@@ -199,6 +200,7 @@ export class Router<T extends RouteHandler> {
 
             const r = records[i];
 
+           
             // path must test positive
             if (r.regex.test(path)) {
 
