@@ -221,7 +221,11 @@ export class Router<T extends RouteHandler> {
 
                 // no concrete match yet, check children if any
                 if (r.children) {
-                    return this._matchRecursive(path, r.children, userData, matchFuncs);
+                    const match = this._matchRecursive(path, r.children, userData, matchFuncs);
+
+                    if(match) {
+                        return match;
+                    }
                 }
 
             }
