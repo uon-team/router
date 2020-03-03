@@ -13,7 +13,44 @@ const PATH_REGEXP = new RegExp([
     // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?"]
     // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined]
     '(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?'
-].join('|'), 'g')
+].join('|'), 'g');
+
+
+
+export function JoinPath(...paths: string[]) {
+
+    let parts: string[] = [];
+    let new_parts: string[] = [];
+
+    // split each path into it's parts and add em to the list
+    for (var i = 0, l = paths.length; i < l; i++) {
+        parts = parts.concat(paths[i].split(PATH_DELIMITER));
+    }
+
+    // put all the parts back together
+    for (i = 0, l = parts.length; i < l; i++) {
+
+        let part = parts[i];
+
+        // ignore empty parts
+        if (!part) {
+            continue;
+        }
+
+
+        new_parts.push(part);
+    }
+
+    // if the first part started with a slash, we want to keep it
+    if (parts[0] === "") {
+        new_parts.unshift("");
+    }
+
+    // turn back into a single string path
+    return new_parts.join(PATH_DELIMITER);
+
+}
+
 
 export function PathToRegex(str: string, keys?: string[]) {
 
