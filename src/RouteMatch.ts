@@ -37,7 +37,7 @@ export class RouteMatch {
     }
 
     /**
-     * Execute all data resolvers, should be called before checkGuards
+     * Execute all data resolvers
      * @param injector 
      */
     async resolveData(injector: Injector) {
