@@ -16,4 +16,4 @@ export interface IRouteDataResolver<T> {
 }
 
 
-export type Resolver<T> = ((v: any) => Promise<T> | T) | Type<IRouteDataResolver<T>>;
+export type Resolver<T> = ((route: ActivatedRoute) => Promise<T> | T) | Type<IRouteDataResolver<T>>;
