@@ -1,7 +1,7 @@
 
-import { Type, GetPropertiesMetadata, PathUtils } from '@uon/core';
+import { Type, GetPropertiesMetadata } from '@uon/core';
 import { Route } from './Route';
-import { PathToRegex } from './Utils';
+import { PathToRegex, JoinPath } from './Utils';
 import { RouteHandler } from './RouteHandler';
 import { RouteMatch } from './RouteMatch';
 import { Resolver } from './Resolver';
@@ -28,12 +28,14 @@ export interface RouterRecord {
 
 
 /**
- * unused
+ * 
  */
-export interface RouteMatchOptions {
-    data?: any;
-    captureController: boolean;
-    captureHandler: boolean;
+export interface RouterOptions {
+
+    /**
+     * Match path only, match won't require handler match
+     */
+    matchPathOnly?: boolean;
 
 }
 
@@ -64,7 +66,7 @@ export class Router<T extends RouteHandler> {
      * Create a new router
      * @param handlerType 
      */
-    constructor(handlerType: Type<T>) {
+    constructor(handlerType: Type<T>, private _options: RouterOptions = {}) {
         this._handlerType = handlerType;
     }
 
@@ -76,7 +78,7 @@ export class Router<T extends RouteHandler> {
     add(route: Route, parent?: RouterRecord) {
 
         const base_path = parent ? parent.path : '';
-        const path = PathUtils.join(base_path, route.path) || '/';
+        const path = JoinPath(base_path, route.path) || '/';
         const keys: string[] = [];
         const regex = PathToRegex(path + (route.children || route.outlet ? '(.*)' : ''), keys);
         const guards = [].concat(parent ? parent.guards : [], route.guards || []);
@@ -113,12 +115,12 @@ export class Router<T extends RouteHandler> {
 
                     if (d instanceof this._handlerType) {
 
-                        
+
                         // ensure children is initialized
                         record.children = record.children || [];
 
                         // join full path
-                        const h_path = PathUtils.join(path, d.path) || '/';
+                        const h_path = JoinPath(path, d.path) || '/';
                         const h_keys: string[] = [];
                         const h_regex = PathToRegex(h_path, h_keys);
                         const h_guards = d.guards || [];
@@ -200,12 +202,13 @@ export class Router<T extends RouteHandler> {
 
             const r = records[i];
 
-           
+
             // path must test positive
             if (r.regex.test(path)) {
 
                 // is this a handler and does it match user data
-                if (r.handler && MatchUserData(matchFuncs, r.handler, userData)) {
+                if ((this._options && this._options.matchPathOnly) ||
+                    r.handler && MatchUserData(matchFuncs, r.handler, userData)) {
 
                     // we have a match, return a RouteMatch object
                     return new RouteMatch(
@@ -223,7 +226,7 @@ export class Router<T extends RouteHandler> {
                 if (r.children) {
                     const match = this._matchRecursive(path, r.children, userData, matchFuncs);
 
-                    if(match) {
+                    if (match) {
                         return match;
                     }
                 }
