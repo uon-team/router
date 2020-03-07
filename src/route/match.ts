@@ -1,11 +1,11 @@
 import { Type, Injector, IsInjectable, THROW_IF_NOT_FOUND } from "@uon/core";
 
-import { RouteHandler } from "./RouteHandler";
-import { RouteGuard, IRouteGuardService } from "./RouteGuard";
-import { ActivatedRoute } from "./ActivatedRoute";
-import { RouteParams } from "./RouteParams";
-import { RouteData } from "./RouteData";
-import { Resolver, IRouteDataResolver } from "./Resolver";
+import { RouteHandler } from "../meta/route.decorator";
+import { RouteGuard, IRouteGuardService } from "./guard";
+import { ActivatedRoute } from "./activated";
+import { RouteParams } from "./params";
+import { RouteData } from "./data";
+import { Resolver, IRouteDataResolver } from "./resolver";
 
 /**
  * Represents a match from the router

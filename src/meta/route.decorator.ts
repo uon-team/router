@@ -1,8 +1,8 @@
 
 
 import { MakePropertyDecorator, PropDecorator, DependencyRecord, GetInjectionTokens } from '@uon/core';
-import { RouteGuard } from './RouteGuard';
-import { Resolver } from './Resolver';
+import { RouteGuard } from '../route/guard';
+import { Resolver } from '../route/resolver';
 
 /**
  * Base class for RouteHandler implementations

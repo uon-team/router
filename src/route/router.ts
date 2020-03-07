@@ -1,10 +1,10 @@
 
 import { Type, GetPropertiesMetadata } from '@uon/core';
-import { Route } from './Route';
-import { PathToRegex, JoinPath } from './Utils';
-import { RouteHandler } from './RouteHandler';
-import { RouteMatch } from './RouteMatch';
-import { Resolver } from './Resolver';
+import { Route } from './route';
+import { PathToRegex, JoinPath } from '../utils/path.utils';
+import { RouteHandler } from '../meta/route.decorator';
+import { RouteMatch } from './match';
+import { Resolver } from './resolver';
 
 
 const EMPTY_OBJECT: any = {};

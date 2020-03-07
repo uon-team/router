@@ -1,5 +1,5 @@
 import { Type } from "@uon/core";
-import { ActivatedRoute } from "./ActivatedRoute";
+import { ActivatedRoute } from "./activated";
 
 
 

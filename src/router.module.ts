@@ -1,6 +1,6 @@
 import { InjectionToken, ModuleWithProviders, Module, Inject } from "@uon/core";
-import { Router } from "./Router";
-import { Routes } from "./Route";
+import { Router } from "./route/router";
+import { Routes } from "./route/route";
 
 export const ROUTER_MODULE_INIT_TOKEN = new InjectionToken<Routes[]>("The routes initializers");
 

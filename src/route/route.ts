@@ -1,6 +1,6 @@
 import { Type } from '@uon/core';
-import { IRouteGuardService, RouteGuard } from './RouteGuard';
-import { Resolver } from './Resolver';
+import { IRouteGuardService, RouteGuard } from './guard';
+import { Resolver } from './resolver';
 
 
 /**

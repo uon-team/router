@@ -1,7 +1,7 @@
 
 
-import { RouteParams } from "./RouteParams";
-import { RouteData, Data } from "./RouteData";
+import { RouteParams } from "./params";
+import { RouteData, Data } from "./data";
 
 
 /**

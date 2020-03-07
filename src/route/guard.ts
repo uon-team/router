@@ -1,4 +1,4 @@
-import { ActivatedRoute } from "./ActivatedRoute";
+import { ActivatedRoute } from "./activated";
 import { Type } from "@uon/core";
 
 
