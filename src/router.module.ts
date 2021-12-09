@@ -8,8 +8,7 @@ export const ROUTER_MODULE_INIT_TOKEN = new InjectionToken<Routes[]>("The routes
 @Module({})
 export class RouterModule {
 
-    constructor(@Inject(ROUTER_MODULE_INIT_TOKEN) routes: Routes[]) {
-    }
+    constructor(@Inject(ROUTER_MODULE_INIT_TOKEN) routes: Routes[]) {}
 
     /**
      * Initiates routes for a given router token
