@@ -1,12 +1,12 @@
 {
   "name": "@uon/router",
-  "version": "0.11.0",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {},
   "peerDependencies": {
-    "@uon/core": "^0.11.0"
+    "@uon/core": "^1.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.1"
