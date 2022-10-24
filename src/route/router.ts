@@ -70,6 +70,10 @@ export class Router<T extends RouteHandler> {
         this._handlerType = handlerType;
     }
 
+    get records() {
+        return this._records;
+    }
+
     /**
      * Adds a route to the router records
      * @param route 
