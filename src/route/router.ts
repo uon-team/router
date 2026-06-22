@@ -135,6 +135,9 @@ export class Router<T extends RouteHandler> {
                             outlet: route.outlet,
                             guards: guards.concat(h_guards),
                             resolvers: h_resolvers,
+                            // propagate the route's merged static data so it
+                            // reaches ActivatedRoute.data on a handler match
+                            data: data,
                             handler: d,
                             regex: h_regex,
                             keys: h_keys
@@ -238,6 +241,9 @@ export class Router<T extends RouteHandler> {
             }
 
         }
+
+        // no record matched
+        return null;
     }
 
 }
@@ -282,6 +288,11 @@ function ExtractParams(route: RouterRecord, path: string) {
     let named = route.keys;
     let result: { [k: string]: string } = {};
     let params = path.match(route.regex);
+
+    // defensive: if the path doesn't actually match, there are no params
+    if (!params) {
+        return result;
+    }
 
     for (let i = 0; i < named.length; i++) {
         let key = named[i].name;

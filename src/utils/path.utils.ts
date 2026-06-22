@@ -17,6 +17,12 @@ const PATH_REGEXP = new RegExp([
 
 
 
+/**
+ * Join URL path segments with single slashes, collapsing empty/duplicate
+ * slashes and preserving a leading slash. Null/undefined segments are skipped.
+ * @param paths the segments to join
+ * @returns the joined path
+ */
 export function JoinPath(...paths: string[]) {
 
     let parts: string[] = [];
@@ -24,7 +30,12 @@ export function JoinPath(...paths: string[]) {
 
     // split each path into it's parts and add em to the list
     for (var i = 0, l = paths.length; i < l; i++) {
-        parts = parts.concat(paths[i].split(PATH_DELIMITER));
+        // skip null/undefined segments and coerce non-strings so a missing
+        // base/child path can't throw a TypeError on .split
+        if (paths[i] == null) {
+            continue;
+        }
+        parts = parts.concat(String(paths[i]).split(PATH_DELIMITER));
     }
 
     // put all the parts back together
@@ -52,6 +63,13 @@ export function JoinPath(...paths: string[]) {
 }
 
 
+/**
+ * Compile an Express-style path (named params `:id`, `?`/`*`/`+` modifiers,
+ * custom capture groups) into a case-insensitive anchored RegExp.
+ * @param str the path pattern
+ * @param keys optional array that receives the parsed parameter tokens, in order
+ * @returns the compiled RegExp
+ */
 export function PathToRegex(str: string, keys?: string[]) {
 
 
