@@ -12,12 +12,12 @@ import { Resolver, IRouteDataResolver } from "./resolver";
  */
 export class RouteMatch {
 
-    private _ac: ActivatedRoute;
+    private _ac!: ActivatedRoute;
 
     constructor(readonly path: string,
         readonly outlet: Type<any>,
         readonly guards: RouteGuard[],
-        readonly handler: RouteHandler,
+        readonly handler: RouteHandler | undefined,
         private _resolvers: { [k: string]: Resolver<any> },
         readonly routeData: any,
         readonly params: { [k: string]: string }) {
@@ -100,7 +100,12 @@ export class RouteMatch {
      */
     async callHandler(injector: Injector) {
 
-        const dep_records = this.handler.dependencies;
+        // a path-only / handler-less match (eg. matchPathOnly) has nothing to call
+        if (!this.handler) {
+            throw new Error('Cannot call handler: this route match has no handler.');
+        }
+
+        const dep_records = this.handler.dependencies || [];
         const p: Promise<any>[] = [];
 
         for (let i = 0, l = dep_records.length; i < l; ++i) {
@@ -115,7 +120,7 @@ export class RouteMatch {
         const outlet = await injector.instanciateAsync(this.outlet);
 
         // call the handler
-        return outlet[this.handler.methodKey](...deps);
+        return outlet[this.handler.methodKey!](...deps);
 
     }
 

@@ -1,15 +1,24 @@
 {
   "name": "@uon/router",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "Generic, decorator-driven route matching and outlets for @uon/core applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc",
+    "test": "TS_NODE_PROJECT=tsconfig.test.json node --require ts-node/register --test \"src/**/*.spec.ts\""
+  },
   "peerDependencies": {
     "@uon/core": "^1.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.4",
+    "reflect-metadata": "^0.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   },
   "repository": {
     "type": "git",
