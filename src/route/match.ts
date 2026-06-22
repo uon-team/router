@@ -12,12 +12,12 @@ import { Resolver, IRouteDataResolver } from "./resolver";
  */
 export class RouteMatch {
 
-    private _ac: ActivatedRoute;
+    private _ac!: ActivatedRoute;
 
     constructor(readonly path: string,
         readonly outlet: Type<any>,
         readonly guards: RouteGuard[],
-        readonly handler: RouteHandler,
+        readonly handler: RouteHandler | undefined,
         private _resolvers: { [k: string]: Resolver<any> },
         readonly routeData: any,
         readonly params: { [k: string]: string }) {
@@ -120,7 +120,7 @@ export class RouteMatch {
         const outlet = await injector.instanciateAsync(this.outlet);
 
         // call the handler
-        return outlet[this.handler.methodKey](...deps);
+        return outlet[this.handler.methodKey!](...deps);
 
     }
 

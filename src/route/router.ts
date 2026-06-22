@@ -85,7 +85,7 @@ export class Router<T extends RouteHandler> {
         const path = JoinPath(base_path, route.path) || '/';
         const keys: string[] = [];
         const regex = PathToRegex(path + (route.children || route.outlet ? '(.*)' : ''), keys);
-        const guards = [].concat(parent ? parent.guards : [], route.guards || []);
+        const guards: any[] = ([] as any[]).concat(parent ? parent.guards : [], route.guards || []);
         const data = Object.assign({}, parent ? parent.data : {}, route.data);
         const resolvers = Object.assign({}, parent ? parent.resolvers : {}, route.resolve);
 
@@ -184,7 +184,7 @@ export class Router<T extends RouteHandler> {
      * @param userData 
      * @param matchFuncs 
      */
-    match(path: string, userData?: any, matchFuncs?: RouteMatchFunction[]): RouteMatch {
+    match(path: string, userData?: any, matchFuncs?: RouteMatchFunction[]): RouteMatch | null {
 
         let result = this._matchRecursive(path, this._records, userData, matchFuncs);
 
@@ -202,7 +202,7 @@ export class Router<T extends RouteHandler> {
     private _matchRecursive(path: string,
         records: RouterRecord[],
         userData: any,
-        matchFuncs: RouteMatchFunction[]): RouteMatch {
+        matchFuncs?: RouteMatchFunction[]): RouteMatch | null {
 
         // go over all records until a match is found
         for (let i = 0; i < records.length; ++i) {
@@ -220,10 +220,10 @@ export class Router<T extends RouteHandler> {
                     // we have a match, return a RouteMatch object
                     return new RouteMatch(
                         path,
-                        r.outlet,
-                        r.guards,
+                        r.outlet!,
+                        r.guards || [],
                         r.handler,
-                        r.resolvers,
+                        r.resolvers || {},
                         r.data,
                         ExtractParams(r, path)
                     );
@@ -258,7 +258,7 @@ export class Router<T extends RouteHandler> {
  * @param handler 
  * @param data 
  */
-function MatchUserData(matchFunctions: RouteMatchFunction[], handler: RouteHandler, data: any) {
+function MatchUserData(matchFunctions: RouteMatchFunction[] | undefined, handler: RouteHandler, data: any) {
 
     if (!data || !matchFunctions) {
         return true;

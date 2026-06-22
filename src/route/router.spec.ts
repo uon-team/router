@@ -28,6 +28,7 @@ describe('Router.add / match', () => {
         const r = makeRouter();
         const m = r.match('/users');
         assert.ok(m);
+        assert.ok(m.handler);
         assert.equal(m.handler.methodKey, 'listUsers');
     });
 
@@ -36,6 +37,7 @@ describe('Router.add / match', () => {
         const m = r.match('/users/42');
         assert.ok(m);
         assert.equal(m.params.id, '42');
+        assert.ok(m.handler);
         assert.equal(m.handler.methodKey, 'getUser');
     });
 
@@ -48,6 +50,7 @@ describe('Router.add / match', () => {
     test('propagates route static data to the matched route', () => {
         const r = makeRouter();
         const m = r.match('/users/42');
+        assert.ok(m);
         const ar = m.toActivatedRoute();
         assert.equal(ar.data.section, 'admin');
     });

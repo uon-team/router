@@ -13,7 +13,7 @@ export class RouteHandler {
     /**
      * The path segment to test
      */
-    path: string;
+    path!: string;
 
     /**
      * Automatically set as the method name it decorates
@@ -79,10 +79,10 @@ export interface RouteHandlerData {
  */
 export function MakeRouteHandlerDecorator<T extends RouteHandlerData>(name: string): RouteHandlerDecorator<T> {
 
-    const decorator: RouteHandlerDecorator<T> = MakePropertyDecorator(name, (obj: any) => obj, RouteHandler, (cls: any, meta: any, key: string) => {
+    const decorator: RouteHandlerDecorator<T> = MakePropertyDecorator(name, (obj: any) => obj, RouteHandler, (cls: any, meta: any, key: string | symbol) => {
 
         meta.methodKey = key;
-        meta.dependencies = GetInjectionTokens(cls, key);
+        meta.dependencies = GetInjectionTokens(cls, key as string);
 
     });
 

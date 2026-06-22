@@ -22,12 +22,14 @@ describe('MakeRouteHandlerDecorator', () => {
     test('auto-populates methodKey with the decorated method name', () => {
         const props = GetPropertiesMetadata(Controller.prototype);
         const d = props['doThing'].find((a: any) => a instanceof SpecRoute);
+        assert.ok(d);
         assert.equal(d.methodKey, 'doThing');
     });
 
     test('auto-populates dependencies', () => {
         const props = GetPropertiesMetadata(Controller.prototype);
         const d = props['doThing'].find((a: any) => a instanceof SpecRoute);
+        assert.ok(d);
         assert.ok(Array.isArray(d.dependencies));
     });
 
